@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CALCULATOR LOGIC WITH JAVASCRIPT</title>
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .calculator {
+            background-color: deepskyblue;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        
+        .calculator input[type="text"] {
+            width: 100%;
+            height: 80px;
+            margin-bottom: 20px;
+            background-color: black;
+            border: none;
+            font-size: 40px;
+            text-align: right;
+            color: white;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 10px;
+            border-style: inset;
+            border-width: 20px;
+        }
+
+        .num-btn {
+            width: 22%;
+            margin: 1%;
+            height: 70px;
+            border-radius: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 70px;
+            color: white;
+            background-color: grey;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .num-btn.orange-btn {
+            background-color: orange;
+        }
+
+        .num-btn.black-btn {    
+            background-color: black;
+        }
+
+        .num-btn:hover {
+            background-color: darkgrey;
+            transform: scale(1.05);
+        }
+
+        .num-btn:active {
+            transform: scale(0.95);
+        }
+
+        @media (min-width: 200px) {
+            .calculator {background-color: rgb(201, 131, 242);}
+            .calculator input[type="text"] {
+                height: 70px;
+                font-size: 30px;
+            }
+
+            .num-btn {
+                height: 70px;
+                font-size: 20px;
+                line-height: 60px;
+            }
+
+        }
+
+        @media (min-width: 400px) {
+            .calculator {background-color:rgb(255, 0, 0);
+            }
+            .calculator input[type="text"] {
+                height: 80px;
+                font-size: 40px;
+            }
+
+            .num-btn {
+                height: 80px;
+                font-size: 20px;
+                line-height: 70px;
+            }
+        }
+
+        @media (min-width: 600px) {
+            .calculator {background-color: rgb(196, 114, 127);}
+            .calculator input[type="text"] {
+                height: 100px;
+                font-size: 50px;
+            }
+
+            .num-btn {
+                height: 90px;
+                font-size: 30px;
+                line-height: 90px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .calculator {background-color:rgb(219, 79, 102);
+            }
+            .calculator input[type="text"] {
+                height: 120px;
+                font-size: 60px;
+            }
+
+            .num-btn {
+                height: 100px;
+                font-size: 40px;
+                line-height: 100px;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .calculator {background-color: deepskyblue;}
+            .calculator input[type="text"] {
+                height: 140px;
+                font-size: 70px;
+            }
+
+            .num-btn {
+                height: 110px;
+                font-size: 50px;
+                line-height: 110px;
+            }    
+        }
+        @media (min-width: 1200px) {
+            .calculator {background-color:rgb(20, 149, 158);
+            }
+            .calculator input[type="text"] {
+                height: 160px;
+                font-size: 80px;
+            }
+
+            .num-btn {
+                height: 120px;
+                font-size: 60px;
+                line-height: 120px;
+            }
+
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="display" disabled>
+        <div>
+            <input type="button" value="C" onclick="clearInput()" class="num-btn black-btn">
+            <input type="button" value="del" onclick="backspace()" class="num-btn black-btn">
+            <input type="button" value="%" onclick="percentage()" class="num-btn black-btn">
+            <input type="button" value="/" onclick="divide()" class="num-btn orange-btn">
+        </div>
+        <div>
+            <input type="button" value="7" onclick="appendNumber(7)" class="num-btn">
+            <input type="button" value="8" onclick="appendNumber(8)" class="num-btn">
+            <input type="button" value="9" onclick="appendNumber(9)" class="num-btn">
+            <input type="button" value="x" onclick="multiply()" class="num-btn orange-btn">
+        </div>
+        <div>
+            <input type="button" value="4" onclick="appendNumber(4)" class="num-btn">
+            <input type="button" value="5" onclick="appendNumber(5)" class="num-btn">
+            <input type="button" value="6" onclick="appendNumber(6)" class="num-btn">
+            <input type="button" value="-" onclick="subtract()" class="num-btn orange-btn">
+        </div>
+        <div>
+            <input type="button" value="1" onclick="appendNumber(1)" class="num-btn">
+            <input type="button" value="2" onclick="appendNumber(2)" class="num-btn">
+            <input type="button" value="3" onclick="appendNumber(3)" class="num-btn">
+            <input type="button" value="+" onclick="add()" class="num-btn orange-btn">
+        </div>
+        <div>
+            <input type="button" value="0" onclick="appendNumber(0)" class="num-btn">
+            <input type="button" value="." onclick="appendDecimal()" class="num-btn black-btn">
+            <input type="button" value="+/-" onclick="positiveNegative()" class="num-btn black-btn">
+            <input type="button" value="=" onclick="calculate()" class="num-btn orange-btn">
+        </div>
+    </div>
+    <script>
+        let currentInput = '';
+
+        function appendNumber(number) {
+            currentInput += number;
+            document.getElementById('display').value = currentInput;
+        }
+
+        function clearInput() {
+            currentInput = '';
+            document.getElementById('display').value = currentInput;
+        }
+
+        function add() {
+            currentInput += '+';
+            document.getElementById('display').value = currentInput;
+        }
+
+        function subtract() {
+            currentInput += '-';
+            document.getElementById('display').value = currentInput;
+        }
+
+        function multiply() {
+            currentInput += '*';
+            document.getElementById('display').value = currentInput;
+        }
+
+        function divide() {
+            currentInput += '/';
+            document.getElementById('display').value = currentInput;
+        }
+
+        function appendDecimal() {
+            currentInput += '.';
+            document.getElementById('display').value = currentInput;
+        }
+
+        function percentage() {
+            currentInput = (eval(currentInput) / 100).toString();
+            document.getElementById('display').value = currentInput;
+        }
+
+        function positiveNegative() {
+            if (currentInput.charAt(0) === '-') {
+                currentInput = currentInput.substring(1);
+            } else {
+                currentInput = '-' + currentInput;
+            }
+            document.getElementById('display').value = currentInput;
+        }
+
+        function backspace() {
+            currentInput = currentInput.slice(0, -1);
+            document.getElementById('display').value = currentInput;
+        }
+
+        function calculate() {
+            try {
+                const result = eval(currentInput);
+                document.getElementById('display').value = result;
+                currentInput = result.toString();
+            } catch (error) {
+                document.getElementById('display').value = 'Error';
+                currentInput = '';
+            }
+        }
+    </script>
+</body>
+</html>
